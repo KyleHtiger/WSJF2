@@ -57,9 +57,16 @@ function showToast(message) {
   }, 2000);
 }
 
+// Function to save results to results.json
 function saveResults() {
-  sessionStorage.setItem('results', JSON.stringify(results));
+  const storedResults = sessionStorage.getItem('results');
+
+  if (storedResults) {
+    const resultsArray = JSON.parse(storedResults);
+    saveDataToGist(resultsArray);
+  }
 }
+
 
 function displayResults() {
   const resultsList = document.getElementById('resultsList');
