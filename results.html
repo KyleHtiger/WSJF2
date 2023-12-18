@@ -185,11 +185,14 @@
         let mostPickedNumberValue = 0; // Track the actual number
         let mostPickedCount = 0;
 
-        resultsArray.forEach(result => {
-          const [name, number] = result.split(' ');
-          const listItem = document.createElement('li');
-          listItem.textContent = result;
-          resultsList.appendChild(listItem);
+      // Clear previous results
+      resultsList.innerHTML = '';
+
+    resultsArray.forEach(result => {
+        const [name, number] = result.split(' ');
+        const listItem = document.createElement('li');
+        listItem.textContent = result;
+        resultsList.appendChild(listItem);
 
           // Count the number of picks for each number
           const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
