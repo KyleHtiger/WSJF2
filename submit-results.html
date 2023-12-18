@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Results</title>
+</head>
+
+<body>
+
+  <h1>Submit Results</h1>
+
+  <!-- Form to submit results -->
+  <form id="resultsForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <br>
+    <label for="number">Number:</label>
+    <input type="number" id="number" required>
+    <br>
+    <button type="button" onclick="submitResults()">Submit</button>
+  </form>
+
+  <script>
+    // Function to submit results
+    function submitResults() {
+      // Get form values
+      const name = document.getElementById('name').value;
+      const number = document.getElementById('number').value;
+
+      // Create result object
+      const result = { name, number };
+
+      // Fetch existing results (assuming you have a JSON file)
+      fetch('results.json')
+        .then(response => response.json())
+        .then(existingResults => {
+          // Add new result to existing results
+          existingResults.push(result);
+
+          // Save updated results back to JSON file
+          const updatedResultsJSON = JSON.stringify(existingResults, null, 2);
+
+          // Use fetch to PUT the updated JSON back to the server
+          fetch('results.json', {
+            method: 'PUT', // Assuming your server supports PUT method
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: updatedResultsJSON,
+          })
+            .then(response => response.json())
+            .then(updatedResults => {
+              console.log('Results updated:', updatedResults);
+            })
+            .catch(error => console.error('Error updating results:', error));
+        })
+        .catch(error => console.error('Error fetching existing results:', error));
+    }
+  </script>
+
+</body>
+
+</html>
