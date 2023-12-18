@@ -24,7 +24,7 @@ function pickNumber() {
     // Save results to session storage
     saveResults();
 
-    // Show toast message for 2 seconds
+    // Show toast message for 2 second
     showToast('Pick Submitted');
   } else {
     alert('Please select your name and pick a number.');
