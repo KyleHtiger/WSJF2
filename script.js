@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Function to fetch Gist data
 function fetchGistData() {
-  const gistID = 'YOUR_GIST_ID';
+  const gistID = '5d00bbddad0777de25828b0d743b4ad8';
 
   fetch(`https://api.github.com/gists/${gistID}`)
     .then(response => response.json())
