@@ -97,8 +97,29 @@
       height: 100%;
       margin: 0 auto;
     }
+
+    #saveResultsBtn {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #toast {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+    }
   </style>
-  
 </head>
 
 <body>
@@ -128,7 +149,13 @@
 
     <h2>Pie Chart</h2>
     <canvas id="pieChart" width="150" height="100"></canvas>
+
+    <!-- Save Results button -->
+    <button id="saveResultsBtn" onclick="saveResults()">Save Results</button>
   </div>
+
+  <!-- Toast message -->
+  <div id="toast"></div>
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -240,6 +267,55 @@
         });
       }
     });
+
+    // Function to save results to results.json on GitHub Gist
+    function saveResults() {
+      const storedResults = sessionStorage.getItem('results');
+
+      if (storedResults) {
+        const resultsArray = JSON.parse(storedResults);
+
+        // Replace 'YOUR_GIST_ID' with your actual Gist ID
+        const gistID = '5d00bbddad0777de25828b0d743b4ad8';
+
+        // Assuming you're using the Fetch API
+        fetch(`https://api.github.com/gists/${gistID}`, {
+          method: 'PATCH', // Use 'PATCH' to update the Gist
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            files: {
+              'results.json': {
+                content: JSON.stringify(resultsArray),
+              },
+            },
+          }),
+        })
+          .then(response => response.json())
+          .then(() => {
+            // Display a toast message
+            showToast('Results saved successfully!');
+          })
+          .catch(error => {
+            console.error('Error saving results:', error);
+            // Display an error toast message
+            showToast('Error saving results. Please try again.');
+          });
+      }
+    }
+
+    // Function to display a toast message
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000); // Hide the toast after 3 seconds
+    }
+    
   </script>
 </body>
 
