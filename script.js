@@ -178,7 +178,7 @@ fetchGistData();
 
 // Function to save data to Gist
 function saveDataToGist(data) {
-  const gistID = 'YOUR_GIST_ID';
+  const gistID = '5d00bbddad0777de25828b0d743b4ad8';
 
   // Assuming you're using the Fetch API
   fetch(`https://api.github.com/gists/${gistID}`, {
