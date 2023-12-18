@@ -1,4 +1,4 @@
-let timer;
+rlet timer;
 let timeLeft;
 let timerRunning = false;
 let results = [];
