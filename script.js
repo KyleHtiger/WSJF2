@@ -175,3 +175,40 @@ function fetchGistData() {
 
 // Call the fetchGistData function
 fetchGistData();
+
+// Function to save data to Gist
+function saveDataToGist(data) {
+  const gistID = 'YOUR_GIST_ID';
+
+  // Assuming you're using the Fetch API
+  fetch(`https://api.github.com/gists/${gistID}`, {
+    method: 'PATCH', // PATCH is used for updating
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Add your GitHub personal access token here
+    },
+    body: JSON.stringify({
+      files: {
+        'results.json': {
+          content: JSON.stringify(data),
+        },
+      },
+    }),
+  })
+    .then(response => response.json())
+    .then(() => {
+      // Display a toast message
+      showToast('Data saved to Gist!');
+    })
+    .catch(error => {
+      console.error('Error saving data to Gist:', error);
+      // Display an error toast message
+      showToast('Error saving data to Gist. Please try again.');
+    });
+}
+
+// Function to display a toast message
+function showToast(message) {
+  alert(message);
+}
+
