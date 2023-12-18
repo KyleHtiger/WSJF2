@@ -156,3 +156,22 @@ function navigateToResults() {
 document.addEventListener('DOMContentLoaded', function () {
   displayResults(); // Call the function to display results
 });
+
+// Function to fetch Gist data
+function fetchGistData() {
+  const gistID = 'YOUR_GIST_ID';
+
+  fetch(`https://api.github.com/gists/${gistID}`)
+    .then(response => response.json())
+    .then(data => {
+      // Access Gist content and other details
+      const files = data.files;
+      const resultsFile = files['results.json'];
+      const resultsContent = resultsFile.content;
+      console.log('Gist Content:', resultsContent);
+    })
+    .catch(error => console.error('Error fetching Gist:', error));
+}
+
+// Call the fetchGistData function
+fetchGistData();
