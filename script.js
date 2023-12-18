@@ -193,7 +193,7 @@ function saveDataToGist(data) {
     method: 'PATCH', // Use 'PATCH' to update the Gist
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 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,
+      'Authorization': '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',
     },
     body: JSON.stringify({
       files: {
