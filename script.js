@@ -185,14 +185,15 @@ fetchGistData();
 
 // Function to save data to Gist
 function saveDataToGist(data) {
-  const gistID = '5d00bbddad0777de25828b0d743b4ad8';
+  const gistID = '5d00bbddad0777de25828b0d743b4ad8'; // Replace with your actual Gist ID
+  const accessToken = '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'; // Replace with your GitHub access token
 
   // Assuming you're using the Fetch API
   fetch(`https://api.github.com/gists/${gistID}`, {
-    method: 'PATCH', // PATCH is used for updating
+    method: 'PATCH', // Use 'PATCH' to update the Gist
     headers: {
       'Content-Type': 'application/json',
-      Authorization: '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', // Add your GitHub personal access token here
+      'Authorization': accessToken,
     },
     body: JSON.stringify({
       files: {
@@ -203,13 +204,14 @@ function saveDataToGist(data) {
     }),
   })
     .then(response => response.json())
-    .then(() => {
-      // Display a toast message
+    .then(data => {
+      // Display a toast message or log data for debugging
       showToast('Data saved to Gist!');
+      console.log('Gist Data:', data);
     })
     .catch(error => {
       console.error('Error saving data to Gist:', error);
-      // Display an error toast message
+      // Display an error toast message or log the error for debugging
       showToast('Error saving data to Gist. Please try again.');
     });
 }
