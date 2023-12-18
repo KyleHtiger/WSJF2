@@ -1,5 +1,3 @@
-// script.js
-
 let timer;
 let timeLeft;
 let timerRunning = false;
@@ -12,7 +10,7 @@ function pickNumber() {
   const participantName = selectedNameChip ? selectedNameChip.textContent.trim() : '';
   const selectedNumber = selectedNumberChip ? selectedNumberChip.textContent.trim() : '';
 
-  if (selectedNameChip && selectedNumber) {
+  if (selectedNameChip && selectedNumberChip) {
     // Disable and grey out the selected name chip
     disableChip(selectedNameChip);
 
@@ -24,7 +22,7 @@ function pickNumber() {
     // Save results to session storage
     saveResults();
 
-    // Show toast message for 2 second
+    // Show toast message for 2 seconds
     showToast('Pick Submitted');
   } else {
     alert('Please select your name and pick a number.');
@@ -67,7 +65,6 @@ function saveResults() {
   }
 }
 
-
 function displayResults() {
   const resultsList = document.getElementById('resultsList');
   const mostPickedNumber = document.getElementById('mostPickedNumber');
@@ -76,56 +73,49 @@ function displayResults() {
   const storedResults = sessionStorage.getItem('results');
 
   if (storedResults) {
-      const resultsArray = JSON.parse(storedResults);
-      const resultsMap = new Map();
-      let mostPickedCount = 0;
-      let highestPickedNumber = 0;
-      let highestNumberPickers = [];
+    const resultsArray = JSON.parse(storedResults);
+    const resultsMap = new Map();
+    let mostPickedCount = 0;
+    let highestPickedNumber = 0;
+    let highestNumberPickers = [];
 
-      resultsArray.forEach(result => {
-          const [name, number] = result.split(' ');
-          const listItem = document.createElement('li');
-          listItem.textContent = result;
-          resultsList.appendChild(listItem);
+    resultsArray.forEach(result => {
+      const [name, number] = result.split(' ');
+      const listItem = document.createElement('li');
+      listItem.textContent = result;
+      resultsList.appendChild(listItem);
 
-          // Count the number of picks for each number
-          const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
-          resultsMap.set(number, count);
+      // Count the number of picks for each number
+      const count = resultsMap.has(number) ? resultsMap.get(number) + 1 : 1;
+      resultsMap.set(number, count);
 
-          // Update mostPickedCount and mostPickedNumber
-          if (count > mostPickedCount) {
-              mostPickedCount = count;
-              highestPickedNumber = parseInt(number, 10);
-              highestNumberPickers = [name]; // Reset the list with a single name
-          } else if (count === mostPickedCount && parseInt(number, 10) > highestPickedNumber) {
-              highestPickedNumber = parseInt(number, 10);
-              highestNumberPickers = [name]; // Reset the list with a single name
-          } else if (count === mostPickedCount && parseInt(number, 10) === highestPickedNumber) {
-              highestNumberPickers.push(name); // Add another name to the list
-          }
-      });
+      // Update mostPickedCount and mostPickedNumber
+      if (count > mostPickedCount) {
+        mostPickedCount = count;
+        highestPickedNumber = parseInt(number, 10);
+        highestNumberPickers = [name]; // Reset the list with a single name
+      } else if (count === mostPickedCount && parseInt(number, 10) > highestPickedNumber) {
+        highestPickedNumber = parseInt(number, 10);
+        highestNumberPickers = [name]; // Reset the list with a single name
+      } else if (count === mostPickedCount && parseInt(number, 10) === highestPickedNumber) {
+        highestNumberPickers.push(name); // Add another name to the list
+      }
+    });
 
-      mostPickedNumber.textContent = highestPickedNumber;
+    mostPickedNumber.textContent = highestPickedNumber;
 
-      // Display names of people who picked the highest number
-      highestNumberPickersList.innerHTML = "";
-      highestNumberPickers.forEach(name => {
-          const highestNumberPicker = document.createElement('li');
-          highestNumberPicker.textContent = name;
-          highestNumberPickersList.appendChild(highestNumberPicker);
-      });
+    // Display names of people who picked the highest number
+    highestNumberPickersList.innerHTML = "";
+    highestNumberPickers.forEach(name => {
+      const highestNumberPicker = document.createElement('li');
+      highestNumberPicker.textContent = name;
+      highestNumberPickersList.appendChild(highestNumberPicker);
+    });
   }
 }
 
-// Event listener for name chips
-document.querySelectorAll('.nameChip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    toggleChip(chip);
-  });
-});
-
-// Event listener for number chips
-document.querySelectorAll('.numberChip').forEach(chip => {
+// Event listener for name chips and number chips
+document.querySelectorAll('.nameChip, .numberChip').forEach(chip => {
   chip.addEventListener('click', () => {
     toggleChip(chip);
   });
@@ -137,22 +127,13 @@ document.getElementById('viewResultsBtn').addEventListener('click', () => {
 });
 
 function toggleChip(chip) {
-  const isNameChip = chip.classList.contains('nameChip');
   const isSelected = chip.classList.contains('selected');
 
-  if (isNameChip) {
-      if (!isSelected) {
-          chip.classList.add('selected');
-      } else {
-          chip.classList.remove('selected');
-      }
+  // Handle both name chips and number chips
+  if (!isSelected) {
+    chip.classList.add('selected');
   } else {
-      // Handle number chips here (add or remove 'selected' class)
-      if (!isSelected) {
-          chip.classList.add('selected');
-      } else {
-          chip.classList.remove('selected');
-      }
+    chip.classList.remove('selected');
   }
 }
 
@@ -168,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function fetchGistData() {
   const gistID = '5d00bbddad0777de25828b0d743b4ad8';
 
-  fetch(`https://api.github.com/gists/${5d00bbddad0777de25828b0d743b4ad8}`)
+  fetch(`https://api.github.com/gists/${gistID}`)
     .then(response => response.json())
     .then(data => {
       // Access Gist content and other details
@@ -189,20 +170,20 @@ function saveDataToGist(data) {
   const accessToken = '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'; // Replace with your GitHub access token
 
   // Assuming you're using the Fetch API
-  fetch(`https://api.github.com/gists/${gistID}`, {
-    method: 'PATCH', // Use 'PATCH' to update the Gist
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': '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',
-    },
-    body: JSON.stringify({
-      files: {
-        'results.json': {
-          content: JSON.stringify(data),
-        },
+  fetch(`https://api.github.com/gists/5d00bbddad0777de25828b0d743b4ad8`, {
+  method: 'PATCH', // Use 'PATCH' to update the Gist
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer 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`,
+  },
+  body: JSON.stringify({
+    files: {
+      'results.json': {
+        content: JSON.stringify(data),
       },
-    }),
-  })
+    },
+  }),
+})
     .then(response => response.json())
     .then(data => {
       // Display a toast message or log data for debugging
@@ -216,8 +197,26 @@ function saveDataToGist(data) {
     });
 }
 
-// Function to display a toast message
-function showToast(message) {
-  alert(message);
+// Function to start the timer
+function startTimer(duration) {
+  timeLeft = duration;
+  timerRunning = true;
+
+  timer = setInterval(function () {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      timerRunning = false;
+      // Handle timer expiration here
+      alert('Time is up!');
+    } else {
+      console.log(`${minutes}:${seconds}`);
+      timeLeft--;
+    }
+  }, 1000);
 }
 
+// Example: Start the timer with a duration of 5 minutes
+// startTimer(5 * 60);
