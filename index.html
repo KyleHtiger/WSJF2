@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    #numberPicker {
+      margin-bottom: 20px;
+    }
+
+    #nameChips,
+    #numberChips {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 8px;
+      margin: 8px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .chip:hover {
+      background-color: #eee;
+    }
+
+    .nameChip.selected,
+    .numberChip.selected {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #featureName {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    #numberChips .chip,
+    #nameChips .chip {
+      width: 60px;
+    }
+
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    #viewResultsBtn {
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    #timerContainer {
+      margin-top: 20px;
+    }
+
+    #countdown {
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+  <title>Number Picker</title>
+</head>
+
+<body>
+  <h1>WSJF Voting</h1>
+
+  <div id="numberPicker">
+    <label for="featureName">Feature Name:</label>
+    <input type="text" id="featureName" placeholder="Enter feature name">
+
+    <div id="nameChips">
+      <div class="chip nameChip" id="Kyle" onclick="toggleChip('Kyle')">Kyle</div>
+      <div class="chip nameChip" id="Stu" onclick="toggleChip('Stu')">Stu</div>
+      <div class="chip nameChip" id="ML1" onclick="toggleChip('ML1')">ML</div>
+      <div class="chip nameChip" id="Mike" onclick="toggleChip('Mike')">Mike</div>
+      <div class="chip nameChip" id="Jono" onclick="toggleChip('Jono')">Jono</div>
+      <div class="chip nameChip" id="Gina" onclick="toggleChip('Gina')">Gina</div>
+    </div>
+
+    <div id="numberChips">
+      <div class="chip numberChip" id="1" onclick="toggleChip('1')">1</div>
+      <div class="chip numberChip" id="2" onclick="toggleChip('2')">2</div>
+      <div class="chip numberChip" id="3" onclick="toggleChip('3')">3</div>
+      <div class="chip numberChip" id="5" onclick="toggleChip('5')">5</div>
+      <div class="chip numberChip" id="8" onclick="toggleChip('8')">8</div>
+      <div class="chip numberChip" id="13" onclick="toggleChip('13')">13</div>
+    </div>
+
+    <button onclick="pickNumber()" class="waves-effect waves-light btn">Pick Number</button>
+  </div>
+
+  <div id="toast" class="black white-text"></div>
+
+  <div id="timerContainer">
+    <h2>Countdown Timer</h2>
+    <!-- Corrected timer buttons in HTML -->
+    <button onclick="startTimer()" class="waves-effect waves-light btn" id="startTimerBtn">Start Timer</button>
+    <button onclick="pauseTimer()" class="waves-effect waves-light btn" id="pauseTimerBtn">Pause Timer</button>
+    <button onclick="clearTimer()" class="waves-effect waves-light btn" id="clearTimerBtn">Clear Timer</button>
+
+    <div id="countdown">2:00</div>
+  </div>
+
+  <button id="viewResultsBtn" onclick="navigateToResults()" class="waves-effect waves-light btn">View Results</button>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      M.AutoInit(); // Initialize Materialize components
+  
+      // Event listener for number chips
+      document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          toggleChip(chip.id);
+        });
+      });
+  
+      // Countdown timer variables
+      let timer;
+      let timeInSeconds = 120; // 2 minutes
+  
+      function updateCountdown() {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        document.getElementById('countdown').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      }
+  
+      function startTimer() {
+        timer = setInterval(() => {
+          timeInSeconds--;
+          if (timeInSeconds < 0) {
+            clearInterval(timer);
+            alert("Timer has ended!");
+          }
+          updateCountdown();
+        }, 1000);
+      }
+  
+      function pauseTimer() {
+        clearInterval(timer);
+      }
+  
+      function clearTimer() {
+        clearInterval(timer);
+        timeInSeconds = 120;
+        updateCountdown();
+      }
+  
+      // Initialize the countdown
+      updateCountdown();
+  
+      // Add event listeners for timer buttons
+      document.getElementById('startTimerBtn').addEventListener('click', startTimer);
+      document.getElementById('pauseTimerBtn').addEventListener('click', pauseTimer);
+      document.getElementById('clearTimerBtn').addEventListener('click', clearTimer);
+  
+      // Function to navigate to the results page
+      function navigateToResults() {
+        // Assuming you want to redirect to a page named results.html
+        window.location.href = 'results.html';
+      }
+    });
+  </script>  
+</body>
+
+</html>
