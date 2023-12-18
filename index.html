@@ -130,7 +130,6 @@
 
   <div id="timerContainer">
     <h2>Countdown Timer</h2>
-    <!-- Corrected timer buttons in HTML -->
     <button onclick="startTimer()" class="waves-effect waves-light btn" id="startTimerBtn">Start Timer</button>
     <button onclick="pauseTimer()" class="waves-effect waves-light btn" id="pauseTimerBtn">Pause Timer</button>
     <button onclick="clearTimer()" class="waves-effect waves-light btn" id="clearTimerBtn">Clear Timer</button>
@@ -193,14 +192,44 @@
       document.getElementById('startTimerBtn').addEventListener('click', startTimer);
       document.getElementById('pauseTimerBtn').addEventListener('click', pauseTimer);
       document.getElementById('clearTimerBtn').addEventListener('click', clearTimer);
-  
-      // Function to navigate to the results page
-      function navigateToResults() {
-        // Assuming you want to redirect to a page named results.html
-        window.location.href = 'results.html';
-      }
     });
-  </script>  
+  
+    function toggleChip(id) {
+      const chip = document.getElementById(id);
+      chip.classList.toggle('selected');
+    }
+  
+    function pickNumber() {
+      const selectedNameChips = Array.from(document.querySelectorAll('.nameChip.selected'));
+      const selectedNumberChips = Array.from(document.querySelectorAll('.numberChip.selected'));
+  
+      if (selectedNameChips.length !== 1 || selectedNumberChips.length !== 1) {
+        showToast('Please select one name and one number.');
+        return;
+      }
+  
+      const selectedName = selectedNameChips[0].id;
+      const selectedNumber = selectedNumberChips[0].id;
+  
+      showToast(`Feature: ${selectedName}, WSJF: ${selectedNumber}`);
+    }
+  
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+  
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+  
+    function navigateToResults() {
+      // Your code to navigate to results page
+      window.location.href = 'results.html'
+      alert('Navigating to results page...');
+    }
+  </script>
 </body>
 
 </html>
