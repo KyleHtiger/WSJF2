@@ -192,7 +192,7 @@ function saveDataToGist(data) {
     method: 'PATCH', // PATCH is used for updating
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Add your GitHub personal access token here
+      Authorization: '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', // Add your GitHub personal access token here
     },
     body: JSON.stringify({
       files: {
